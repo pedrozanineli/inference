@@ -95,12 +95,15 @@ def set_calc(model_name):
 		end = time.time()
 		print(end-begin)
 
-	real_energies,predicted_energies = np.array(real_energies),np.array(predicted_energies)
-	real_forces,predicted_forces = np.array(real_forces),np.array(predicted_forces)
+	with open('results/predicted_energies_{model_name}.pkl','wb') as f: pickle.dump(predicted_energies,f)
+	with open('results/predicted_forces_{model_name}.pkl','wb') as f: pickle.dump(predicted_forces,f)
 
-	np.save(f'results/real_energies.npy',real_energies)
-	np.save(f'results/predicted_energies_{model_name}.npy',predicted_energies)
-	np.save(f'results/real_forces.npy',real_forces)
-	np.save(f'results/predicted_forces_{model_name}.npy',predicted_forces)
+	# real_energies,predicted_energies = np.array(real_energies),np.array(predicted_energies)
+	# real_forces,predicted_forces = np.array(real_forces),np.array(predicted_forces)
+
+	# np.save(f'results/real_energies.npy',real_energies)
+	# np.save(f'results/predicted_energies_{model_name}.npy',predicted_energies)
+	# np.save(f'results/real_forces.npy',real_forces)
+	# np.save(f'results/predicted_forces_{model_name}.npy',predicted_forces)
 
 set_calc(model_name)
