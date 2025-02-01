@@ -16,7 +16,7 @@ def load(path):
     return load
 
 def eval_report(y_pred,y_real):
-    r2 = round(metrics.r2_score(y_real,y_pred),6)
+    r2 = round(metrics.r2_score(y_real,y_pred),10)
     mae = metrics.mean_absolute_error(y_real,y_pred)
     rmse = metrics.root_mean_squared_error(y_pred,y_real)
 
