@@ -35,10 +35,11 @@ def forces_calculator(molecule):
 
 def set_calc(model_name):
 	
-	change_env(model_name)
+	# change_env(model_name)
 
 	device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 	print(device)
+
 	# ORB model
 	if model_name == "orb":
 		from orb_models.forcefield import pretrained
@@ -49,10 +50,11 @@ def set_calc(model_name):
 	# Fair-chem model
 	elif model_name == "fair-chem":
 		from fairchem.core import OCPCalculator
+		device='cpu'
 		calc = OCPCalculator(
 		model_name="EquiformerV2-31M-S2EF-OC20-All+MD",
 		local_cache="pretrained_models",
-		cpu=(device == "cpu")
+		cpu=(device == 'cpu')
 		)
 	
 	# MACE model
@@ -77,33 +79,36 @@ def set_calc(model_name):
 
 		for struc_index,structure in enumerate(structures):
 
-			real_energy = structure.get_potential_energy()
-			real_force = forces_calculator(structure)
+			# real_energy = structure.get_potential_energy()
+			# real_force = forces_calculator(structure)
 
 			structure.calc = calc
 			predicted_energy = structure.get_potential_energy()
 			predicted_force = forces_calculator(structure)
 
-			print(struc_index,real_energy,predicted_energy)
+			# print(struc_index,real_energy,predicted_energy)
 
-			real_energies.append(real_energy)
+			# real_energies.append(real_energy)
 			predicted_energies.append(predicted_energy)
 
-			real_forces.append(real_force)
+			# real_forces.append(real_force)
 			predicted_forces.append(predicted_force)
+
+			# for atom in structure:
+
+				# real_energy = atom.get_potential_energy()
+				# atom.calc = calc
+				# predicted_energy = atom.get_potential_energy()
+
+				# real_energies.append(real_energy)
+				# predicted_energies.append(predicted_energy)
+
+		with open(f'results/predicted_energies_{model_name}.pkl','wb') as f: pickle.dump(predicted_energies,f)
+		with open(f'results/predicted_forces_{model_name}.pkl','wb') as f: pickle.dump(predicted_forces,f)
 
 		end = time.time()
 		print(end-begin)
 
-	with open('results/predicted_energies_{model_name}.pkl','wb') as f: pickle.dump(predicted_energies,f)
-	with open('results/predicted_forces_{model_name}.pkl','wb') as f: pickle.dump(predicted_forces,f)
-
-	# real_energies,predicted_energies = np.array(real_energies),np.array(predicted_energies)
-	# real_forces,predicted_forces = np.array(real_forces),np.array(predicted_forces)
-
-	# np.save(f'results/real_energies.npy',real_energies)
-	# np.save(f'results/predicted_energies_{model_name}.npy',predicted_energies)
-	# np.save(f'results/real_forces.npy',real_forces)
-	# np.save(f'results/predicted_forces_{model_name}.npy',predicted_forces)
+	# with open('results/predicted_forces_{model_name}.pkl','wb') as f: pickle.dump(predicted_forces,f)
 
 set_calc(model_name)
