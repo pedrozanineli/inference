@@ -79,14 +79,14 @@ def set_calc(model_name):
 
 	for file in tqdm(range(len(files))):
 
-		begin = time.time()
+		# begin = time.time()
 		structures = read(f'Dataset_ZrO2/{files[file]}',index=':') # to read all sampled structures
 		print(files[file],len(structures))
 
 		for struc_index,structure in enumerate(structures):
 
-			# real_energy = structure.get_potential_energy()
-			# real_force = forces_calculator(structure)
+			real_energy = structure.get_potential_energy()
+			real_force = forces_calculator(structure)
 
 			structure.calc = calc
 			predicted_energy = structure.get_potential_energy()
@@ -94,10 +94,10 @@ def set_calc(model_name):
 
 			# print(struc_index,real_energy,predicted_energy)
 
-			# real_energies.append(real_energy)
+			real_energies.append(real_energy)
 			predicted_energies.append(predicted_energy)
 
-			# real_forces.append(real_force)
+			real_forces.append(real_force)
 			predicted_forces.append(predicted_force)
 
 			# for atom in structure:
@@ -109,11 +109,13 @@ def set_calc(model_name):
 				# real_energies.append(real_energy)
 				# predicted_energies.append(predicted_energy)
 
-		with open(f'results/new_predicted_energies_{model_name}.pkl','wb') as f: pickle.dump(predicted_energies,f)
-		with open(f'results/new_predicted_forces_{model_name}.pkl','wb') as f: pickle.dump(predicted_forces,f)
-
-		end = time.time()
-		print(end-begin)
+		with open(f'results/predicted_energies_{model_name}.pkl','wb') as f: pickle.dump(predicted_energies,f)
+		with open(f'results/predicted_forces_{model_name}.pkl','wb') as f: pickle.dump(predicted_forces,f)
+		with open(f'results/dft_forces_{model_name}.pkl','wb') as f: pickle.dump(real_forces,f)
+		with open(f'results/dft_energies_{model_name}.pkl','wb') as f: pickle.dump(real_energies,f)
+		
+                # end = time.time()
+		# print(end-begin)
 
 	# with open('results/predicted_forces_{model_name}.pkl','wb') as f: pickle.dump(predicted_forces,f)
 
