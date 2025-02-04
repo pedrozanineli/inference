@@ -34,7 +34,7 @@ def forces_calculator(molecule):
     return forces
 
 def set_calc(model_name):
-	
+
 	# change_env(model_name)
 
 	device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -44,23 +44,29 @@ def set_calc(model_name):
 	if model_name == "orb":
 		from orb_models.forcefield import pretrained
 		from orb_models.forcefield.calculator import ORBCalculator
+
 		model = pretrained.orb_v2(device=device)
 		calc = ORBCalculator(model, device=device)
-	
+
 	# Fair-chem model
 	elif model_name == "fair-chem":
 		from fairchem.core import OCPCalculator
-		device='cpu'
 		calc = OCPCalculator(
-		model_name="EquiformerV2-31M-S2EF-OC20-All+MD",
+		model_name="EquiformerV2-31M-S2EF-OC20-All+MD",  # "eqV2_dens_153M_mp",
 		local_cache="pretrained_models",
-		cpu=(device == 'cpu')
+		cpu=False,
+		# cpu = (device=='cpu')
 		)
-	
+
 	# MACE model
 	elif model_name == "mace":
 		from mace.calculators import mace_mp
 		calc = mace_mp(model="large",device='cuda',default_dtype='float64')
+
+	elif model_name == "deepmd":
+		from deepmd.calculator import DP
+		model = "pretrained_models/2025-01-10-dpa3-openlam.pth"
+		calc = DP(model=model)
 
 	else:
 		raise ValueError("Model not supported. The list of currently supported models is on etc/README.md")
@@ -103,8 +109,8 @@ def set_calc(model_name):
 				# real_energies.append(real_energy)
 				# predicted_energies.append(predicted_energy)
 
-		with open(f'results/predicted_energies_{model_name}.pkl','wb') as f: pickle.dump(predicted_energies,f)
-		with open(f'results/predicted_forces_{model_name}.pkl','wb') as f: pickle.dump(predicted_forces,f)
+		with open(f'results/new_predicted_energies_{model_name}.pkl','wb') as f: pickle.dump(predicted_energies,f)
+		with open(f'results/new_predicted_forces_{model_name}.pkl','wb') as f: pickle.dump(predicted_forces,f)
 
 		end = time.time()
 		print(end-begin)
