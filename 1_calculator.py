@@ -77,9 +77,12 @@ def set_calc(model_name):
 	real_energies,predicted_energies = [],[]
 	real_forces,predicted_forces = [],[]
 
+	path = f'results/{model_name}'
+	if not os.path.exists(path): os.makedirs(path)
+
 	for file in tqdm(range(len(files))):
 
-		# begin = time.time()
+		begin = time.time()
 		structures = read(f'Dataset_ZrO2/{files[file]}',index=':') # to read all sampled structures
 		print(files[file],len(structures))
 
@@ -92,31 +95,19 @@ def set_calc(model_name):
 			predicted_energy = structure.get_potential_energy()
 			predicted_force = forces_calculator(structure)
 
-			# print(struc_index,real_energy,predicted_energy)
-
-			real_energies.append(real_energy)
-			predicted_energies.append(predicted_energy)
+			# energy by atom
+			real_energies.append(real_energy/len(structure))
+			predicted_energies.append(predicted_energy/len(structure))
 
 			real_forces.append(real_force)
 			predicted_forces.append(predicted_force)
 
-			# for atom in structure:
+		end = time.time()
+		print(file,end-begin)
 
-				# real_energy = atom.get_potential_energy()
-				# atom.calc = calc
-				# predicted_energy = atom.get_potential_energy()
-
-				# real_energies.append(real_energy)
-				# predicted_energies.append(predicted_energy)
-
-		with open(f'results/predicted_energies_{model_name}.pkl','wb') as f: pickle.dump(predicted_energies,f)
-		with open(f'results/predicted_forces_{model_name}.pkl','wb') as f: pickle.dump(predicted_forces,f)
-		with open(f'results/dft_forces_{model_name}.pkl','wb') as f: pickle.dump(real_forces,f)
-		with open(f'results/dft_energies_{model_name}.pkl','wb') as f: pickle.dump(real_energies,f)
-		
-                # end = time.time()
-		# print(end-begin)
-
-	# with open('results/predicted_forces_{model_name}.pkl','wb') as f: pickle.dump(predicted_forces,f)
+		with open(f'{path}/predicted_energies.pkl','wb') as f: pickle.dump(predicted_energies,f)
+		with open(f'{path}/predicted_forces.pkl','wb') as f: pickle.dump(predicted_forces,f)
+		with open(f'{path}/dft_forces.pkl','wb') as f: pickle.dump(real_forces,f)
+		with open(f'{path}/dft_energies.pkl','wb') as f: pickle.dump(real_energies,f)
 
 set_calc(model_name)
