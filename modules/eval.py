@@ -49,9 +49,9 @@ def parity_plot(X,y,label,unit,style=0,model=None):
     style_color,style_symbol = code[style]
 
     if model != None:
-        plt.scatter(X, y,s=18,color=style_color,marker=style_symbol,alpha=0.5,label=f'{model} (RMSE={round(rmse,2)} {unit})')
+        plt.scatter(X, y,s=18,color=style_color,marker=style_symbol,alpha=0.25,label=f'{model} (RMSE={round(rmse,2)} {unit})')
     else:
-        plt.scatter(X, y,s=18,color=style_color,marker=style_symbol,alpha=0.5,label=f'RMSE={round(rmse,2)} {unit}')
+        plt.scatter(X, y,s=18,color=style_color,marker=style_symbol,alpha=0.25,label=f'RMSE={round(rmse,2)} {unit}')
 
     plt.ylabel(f'ML Predicted {label}')
     plt.xlabel(f'DFT {label}')
@@ -87,7 +87,7 @@ def coded_parity_plot(X,y,label,ref):
 
     plt.xlabel(f'ML Predicted {label}')
     plt.ylabel(f'DFT {label}')
-    plt.legend()
+    plt.legend(loc='upper left')
 
 def coded_scatter_plot(X,y,labelX,labelY,ref):
     colors = ['#66c5cc', '#f6cf71', '#f89c74', '#dcb0f2', '#87c55f', '#9eb9f3', '#fe88b1', '#c9db74', '#8be0a4', '#b497e7']
@@ -114,3 +114,20 @@ def coded_scatter_plot(X,y,labelX,labelY,ref):
     plt.xlabel(f'Predicted {labelX}')
     plt.ylabel(f'Real {labelY}')
     plt.legend()
+
+def error_visualization(models):
+    keys,errors = [],[]
+    for model in models:
+        
+        model_key = model[0]
+        dft_energies,ml_energies = model[1]
+        error = []
+        
+        for dft_energy,ml_energy in zip(np.array(dft_energies),np.array(ml_energies)):
+            energy_absolute_error = np.abs(ml_energy - dft_energy)
+            error.append(energy_absolute_error)
+        
+        keys.append(model_key)
+        errors.append(error)
+    
+    plt.boxplot([i for i in errors],tick_labels=keys)
