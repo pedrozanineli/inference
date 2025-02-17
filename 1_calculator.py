@@ -11,6 +11,7 @@ from ase import Atoms
 from tqdm import tqdm
 from ase.io import read
 from ase.build import bulk
+from codecarbon import EmissionsTracker
 
 warnings.filterwarnings('ignore')
 
@@ -52,10 +53,9 @@ def set_calc(model_name):
 	elif model_name == "fair-chem":
 		from fairchem.core import OCPCalculator
 		calc = OCPCalculator(
-		model_name="EquiformerV2-31M-S2EF-OC20-All+MD",  # "eqV2_dens_153M_mp",
+		model_name="2025-01-10-dpa3-openlam.pth",
 		local_cache="pretrained_models",
 		cpu=False,
-		# cpu = (device=='cpu')
 		)
 
 	# MACE model
@@ -80,12 +80,14 @@ def set_calc(model_name):
 	path = f'results/{model_name}'
 	if not os.path.exists(path): os.makedirs(path)
 
+	tracker = EmissionsTracker(output_dir='emissions',output_file=f'{model_name}.csv' )
+	tracker.start()
+	begin = time.time()
+
 	for file in tqdm(range(len(files))):
 
 		begin = time.time()
 		structures = read(f'Dataset_ZrO2/{files[file]}',index=':') # to read all sampled structures
-		print(files[file],len(structures))
-
 		for struc_index,structure in enumerate(structures):
 
 			real_energy = structure.get_potential_energy()
@@ -102,12 +104,14 @@ def set_calc(model_name):
 			real_forces.append(real_force)
 			predicted_forces.append(predicted_force)
 
-		end = time.time()
-		print(file,end-begin)
-
 		with open(f'{path}/predicted_energies.pkl','wb') as f: pickle.dump(predicted_energies,f)
 		with open(f'{path}/predicted_forces.pkl','wb') as f: pickle.dump(predicted_forces,f)
 		with open(f'{path}/dft_forces.pkl','wb') as f: pickle.dump(real_forces,f)
 		with open(f'{path}/dft_energies.pkl','wb') as f: pickle.dump(real_energies,f)
+
+	end = time.time()
+	total_time = end-begin
+	with open('run_time.txt','a') as f: f.write(f'{model_name}: {total_time:.6f}')
+	tracker.stop()
 
 set_calc(model_name)

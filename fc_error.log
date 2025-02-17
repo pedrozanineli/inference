@@ -1,0 +1,23 @@
+
+CondaError: Run 'conda init' before 'conda activate'
+
+Traceback (most recent call last):
+  File "/home/pedro.zanineli/phd/inference/1_calculator.py", line 117, in <module>
+    set_calc(model_name)
+  File "/home/pedro.zanineli/phd/inference/1_calculator.py", line 54, in set_calc
+    from fairchem.core import OCPCalculator
+  File "/home/pedro.zanineli/miniforge3/envs/fair-chem/lib/python3.9/site-packages/fairchem/core/__init__.py", line 12, in <module>
+    from fairchem.core.common.relaxation.ase_utils import OCPCalculator
+  File "/home/pedro.zanineli/miniforge3/envs/fair-chem/lib/python3.9/site-packages/fairchem/core/common/relaxation/__init__.py", line 10, in <module>
+    from .ml_relaxation import ml_relax
+  File "/home/pedro.zanineli/miniforge3/envs/fair-chem/lib/python3.9/site-packages/fairchem/core/common/relaxation/ml_relaxation.py", line 19, in <module>
+    from fairchem.core.datasets.lmdb_dataset import data_list_collater
+  File "/home/pedro.zanineli/miniforge3/envs/fair-chem/lib/python3.9/site-packages/fairchem/core/datasets/__init__.py", line 7, in <module>
+    from .ase_datasets import AseDBDataset, AseReadDataset, AseReadMultiStructureDataset
+  File "/home/pedro.zanineli/miniforge3/envs/fair-chem/lib/python3.9/site-packages/fairchem/core/datasets/ase_datasets.py", line 31, in <module>
+    from fairchem.core.modules.transforms import DataTransforms
+  File "/home/pedro.zanineli/miniforge3/envs/fair-chem/lib/python3.9/site-packages/fairchem/core/modules/transforms.py", line 7, in <module>
+    from fairchem.core.common.utils import cg_change_mat, irreps_sum
+  File "/home/pedro.zanineli/miniforge3/envs/fair-chem/lib/python3.9/site-packages/fairchem/core/common/utils.py", line 42, in <module>
+    from torch_scatter import scatter, segment_coo, segment_csr
+ModuleNotFoundError: No module named 'torch_scatter'
