@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH --job-name=fairchem
-#SBATCH --output=fc_output.log
-#SBATCH --error=fc_error.log
+#SBATCH --job-name=grace
+#SBATCH --output=output.log
+#SBATCH --error=error.log
 #SBATCH --partition=gpu-pbi  
 #SBATCH --gres=gpu:1
 #SBATCH --time=08:00:00
@@ -10,7 +10,7 @@
 
 conda init
 
-conda activate fair-chem
+conda activate grace
 
-python3 1_calculator.py fair-chem
+python3 1_calculator.py grace
 

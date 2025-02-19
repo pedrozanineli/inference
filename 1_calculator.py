@@ -53,9 +53,10 @@ def set_calc(model_name):
 	elif model_name == "fair-chem":
 		from fairchem.core import OCPCalculator
 		calc = OCPCalculator(
-		model_name="2025-01-10-dpa3-openlam.pth",
-		local_cache="pretrained_models",
-		cpu=False,
+		# model_name="2025-01-10-dpa3-openlam.pth",
+		# local_cache="pretrained_models",
+                checkpoint_path='pretrained_models/eqV2_86M_omat.pt',
+		cpu=True,
 		)
 
 	# MACE model
@@ -67,6 +68,10 @@ def set_calc(model_name):
 		from deepmd.calculator import DP
 		model = "pretrained_models/2025-01-10-dpa3-openlam.pth"
 		calc = DP(model=model)
+
+        elif model_name == "grace":
+                from tensorpotential.calculator import TPCalculator
+                calc = TPCalculator('pretrained_models/GRACE-2L-OAM_28Jan25/metadata.yaml')
 
 	else:
 		raise ValueError("Model not supported. The list of currently supported models is on etc/README.md")
