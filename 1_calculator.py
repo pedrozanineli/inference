@@ -15,7 +15,8 @@ from codecarbon import EmissionsTracker
 
 warnings.filterwarnings('ignore')
 
-model_name = sys.argv[1]
+# model_name = sys.argv[1]
+model_name = 'fair-chem'
 
 def change_env(uip):
         activate_cmd = (
@@ -56,7 +57,7 @@ def set_calc(model_name):
 		# model_name="2025-01-10-dpa3-openlam.pth",
 		# local_cache="pretrained_models",
                 checkpoint_path='pretrained_models/eqV2_86M_omat.pt',
-		cpu=True,
+		cpu=False,
 		)
 
 	# MACE model
@@ -69,9 +70,9 @@ def set_calc(model_name):
 		model = "pretrained_models/2025-01-10-dpa3-openlam.pth"
 		calc = DP(model=model)
 
-        elif model_name == "grace":
-                from tensorpotential.calculator import TPCalculator
-                calc = TPCalculator('pretrained_models/GRACE-2L-OAM_28Jan25/metadata.yaml')
+        # elif model_name == "grace":
+                # from tensorpotential.calculator import TPCalculator
+                # calc = TPCalculator('pretrained_models/GRACE-2L-OAM_28Jan25/metadata.yaml')
 
 	else:
 		raise ValueError("Model not supported. The list of currently supported models is on etc/README.md")

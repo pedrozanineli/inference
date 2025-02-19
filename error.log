@@ -1,6 +1,258 @@
 
 CondaError: Run 'conda init' before 'conda activate'
 
-  File "/home/pedro.zanineli/phd/inference/1_calculator.py", line 72
-    elif model_name == "grace":
-TabError: inconsistent use of tabs and spaces in indentation
+INFO:root:local rank base: 0
+WARNING:root:Couldn't modify the submission pickle with error: [Errno 2] No such file or directory: '/fsx-ocp-med/lbluque/logs/bulk-discovery-pbe/S2EFS/train/4400014/101173_submitted.pkl'
+INFO:root:amp: true
+cmd:
+  checkpoint_dir: /home/pedro.zanineli/phd/inference/checkpoints/2025-02-19-09-37-20
+  commit: null
+  identifier: ''
+  logs_dir: /home/pedro.zanineli/phd/inference/logs/wandb/2025-02-19-09-37-20
+  print_every: 100
+  results_dir: /home/pedro.zanineli/phd/inference/results/2025-02-19-09-37-20
+  seed: null
+  timestamp_id: 2025-02-19-09-37-20
+  version: 1.4.0
+dataset:
+  a2g_args:
+    r_energy: true
+    r_forces: true
+    r_stress: true
+  format: ase_db
+  transforms:
+    decompose_tensor:
+      decomposition:
+        stress_anisotropic:
+          irrep_dim: 2
+        stress_isotropic:
+          irrep_dim: 0
+      rank: 2
+      tensor: stress
+    element_references:
+      file: /fsx-ocp-med/shared/omat24/norms-refs/2024-09-13/element_references.pt
+    normalizer:
+      file: /fsx-ocp-med/shared/omat24/norms-refs/2024-09-13/normalizers.pt
+evaluation_metrics:
+  metrics:
+    energy:
+    - mae
+    - mae_density
+    forces:
+    - mae
+    - forcesx_mae
+    - forcesy_mae
+    - forcesz_mae
+    - cosine_similarity
+    stress:
+    - mae
+    - mae_density
+    stress_anisotropic:
+    - mae
+    stress_isotropic:
+    - mae
+  primary_metric: energy_mae
+gp_gpus: null
+gpus: 1
+logger: wandb
+loss_functions:
+- energy:
+    coefficient: 20
+    fn: mae_density
+- forces:
+    coefficient: 20
+    fn: l2mae
+- stress_isotropic:
+    coefficient: 5
+    fn: mae
+- stress_anisotropic:
+    coefficient: 5
+    fn: mae
+    reduction: mean_all
+model:
+  backbone:
+    alpha_drop: 0.1
+    attn_activation: silu
+    attn_alpha_channels: 64
+    attn_hidden_channels: 64
+    attn_value_channels: 16
+    avg_degree: 61.94676351484548
+    avg_num_nodes: 31.16592360068011
+    distance_function: gaussian
+    drop_path_rate: 0.1
+    edge_channels: 128
+    enforce_max_neighbors_strictly: false
+    ffn_activation: silu
+    ffn_hidden_channels: 128
+    grid_resolution: 18
+    lmax_list:
+    - 6
+    max_neighbors: 20
+    max_num_elements: 96
+    max_radius: 12.0
+    mmax_list:
+    - 4
+    model: equiformer_v2_backbone
+    norm_type: layer_norm_sh
+    num_distance_basis: 512
+    num_heads: 8
+    num_layers: 10
+    num_sphere_samples: 128
+    otf_graph: true
+    proj_drop: 0.0
+    share_atom_edge_embedding: false
+    sphere_channels: 128
+    use_atom_edge_embedding: true
+    use_attn_renorm: true
+    use_gate_act: false
+    use_grid_mlp: true
+    use_m_share_rad: false
+    use_pbc: true
+    use_pbc_single: true
+    use_s2_act_attn: false
+    use_sep_s2_act: true
+    weight_init: uniform
+  heads:
+    energy:
+      module: fairchem.core.models.equiformer_v2.heads.EqV2ScalarHead
+    forces:
+      module: fairchem.core.models.equiformer_v2.heads.EqV2VectorHead
+    stress:
+      decompose: true
+      module: fairchem.core.models.equiformer_v2.heads.Rank2SymmetricTensorHead
+      output_name: stress
+      use_source_target_embedding: true
+  name: hydra
+  otf_graph: true
+  pass_through_head_outputs: true
+optim:
+  batch_size: 8
+  clip_grad_norm: 100
+  ema_decay: 0.999
+  eval_batch_size: 12
+  eval_every: 5000
+  load_balancing: atoms
+  lr_initial: 0.0006
+  max_epochs: 2
+  num_workers: 8
+  optimizer: AdamW
+  optimizer_params:
+    weight_decay: 0.001
+  scheduler: LambdaLR
+  scheduler_params:
+    epochs: 393848
+    lambda_type: cosine
+    lr: 0.0006
+    lr_min_factor: 0.01
+    warmup_epochs: 1969
+    warmup_factor: 0.2
+outputs:
+  energy:
+    level: system
+    property: energy
+  forces:
+    eval_on_free_atoms: true
+    level: atom
+    property: forces
+    train_on_free_atoms: true
+  stress:
+    decomposition:
+      stress_anisotropic:
+        eval_on_free_atoms: true
+        irrep_dim: 2
+        level: system
+        parent: stress
+        train_on_free_atoms: true
+      stress_isotropic:
+        eval_on_free_atoms: true
+        irrep_dim: 0
+        level: system
+        parent: stress
+        train_on_free_atoms: true
+    level: system
+    property: stress
+relax_dataset: {}
+slurm:
+  account: ocp
+  cpus_per_task: 9
+  folder: /fsx-ocp-med/lbluque/logs/bulk-discovery-pbe/S2EFS/train/4400014
+  gpus_per_node: 8
+  job_id: '101173'
+  job_name: N10L6M4_ec20_fc20_sc5_nd8_bfix
+  mem: 480GB
+  nodes: 8
+  ntasks_per_node: 8
+  partition: learn
+  qos: ocp_high
+  time: 4320
+task: {}
+test_dataset: {}
+trainer: ocp
+val_dataset: {}
+
+INFO:root:Loading model: hydra
+INFO:root:Loaded HydraModel with 86589068 parameters.
+INFO:root:Loading checkpoint in inference-only mode, not loading keys associated with trainer state!
+WARNING:root:No seed has been set in modelcheckpoint or OCPCalculator! Results may not be reproducible on re-run
+[codecarbon INFO @ 09:36:52] [setup] RAM Tracking...
+[codecarbon INFO @ 09:36:52] [setup] CPU Tracking...
+[codecarbon INFO @ 09:36:52] Tracking Intel CPU via RAPL interface
+[codecarbon INFO @ 09:36:53] [setup] GPU Tracking...
+[codecarbon INFO @ 09:36:53] Tracking Nvidia GPU via pynvml
+[codecarbon INFO @ 09:36:53] >>> Tracker's metadata:
+[codecarbon INFO @ 09:36:53]   Platform system: Linux-4.18.0-372.9.1.el8.x86_64-x86_64-with-glibc2.28
+[codecarbon INFO @ 09:36:53]   Python version: 3.9.21
+[codecarbon INFO @ 09:36:53]   CodeCarbon version: 2.8.3
+[codecarbon INFO @ 09:36:53]   Available RAM : 16.000 GB
+[codecarbon INFO @ 09:36:53]   CPU count: 4
+[codecarbon INFO @ 09:36:53]   CPU model: AMD EPYC 7742 64-Core Processor
+[codecarbon INFO @ 09:36:53]   GPU count: 1
+[codecarbon INFO @ 09:36:53]   GPU model: 1 x NVIDIA A100-SXM4-40GB BUT only tracking these GPU ids : [0]
+[codecarbon INFO @ 09:36:56] Saving emissions data to file /home/pedro.zanineli/phd/inference/emissions/fair-chem.csv
+  0%|          | 0/35 [00:00<?, ?it/s]  0%|          | 0/35 [00:00<?, ?it/s]
+Traceback (most recent call last):
+  File "/home/pedro.zanineli/phd/inference/1_calculator.py", line 123, in <module>
+    set_calc(model_name)
+  File "/home/pedro.zanineli/phd/inference/1_calculator.py", line 103, in set_calc
+    predicted_energy = structure.get_potential_energy()
+  File "/home/pedro.zanineli/miniforge3/envs/fair-chem/lib/python3.9/site-packages/ase/atoms.py", line 770, in get_potential_energy
+    energy = self._calc.get_potential_energy(self)
+  File "/home/pedro.zanineli/miniforge3/envs/fair-chem/lib/python3.9/site-packages/ase/calculators/abc.py", line 24, in get_potential_energy
+    return self.get_property(name, atoms)
+  File "/home/pedro.zanineli/miniforge3/envs/fair-chem/lib/python3.9/site-packages/ase/calculators/calculator.py", line 538, in get_property
+    self.calculate(atoms, [name], system_changes)
+  File "/home/pedro.zanineli/miniforge3/envs/fair-chem/lib/python3.9/site-packages/fairchem/core/common/relaxation/ase_utils.py", line 292, in calculate
+    predictions = self.trainer.predict(batch, per_image=False, disable_tqdm=True)
+  File "/home/pedro.zanineli/miniforge3/envs/fair-chem/lib/python3.9/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+  File "/home/pedro.zanineli/miniforge3/envs/fair-chem/lib/python3.9/site-packages/fairchem/core/trainers/ocp_trainer.py", line 473, in predict
+    out = self._forward(batch)
+  File "/home/pedro.zanineli/miniforge3/envs/fair-chem/lib/python3.9/site-packages/fairchem/core/trainers/ocp_trainer.py", line 254, in _forward
+    out = self.model(batch.to(self.device))
+  File "/home/pedro.zanineli/miniforge3/envs/fair-chem/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/pedro.zanineli/miniforge3/envs/fair-chem/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/pedro.zanineli/miniforge3/envs/fair-chem/lib/python3.9/site-packages/fairchem/core/models/base.py", line 330, in forward
+    emb = self.backbone(data)
+  File "/home/pedro.zanineli/miniforge3/envs/fair-chem/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/pedro.zanineli/miniforge3/envs/fair-chem/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/pedro.zanineli/miniforge3/envs/fair-chem/lib/python3.9/site-packages/fairchem/core/common/utils.py", line 176, in cls_method
+    return f(self, *args, **kwargs)
+  File "/home/pedro.zanineli/miniforge3/envs/fair-chem/lib/python3.9/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+  File "/home/pedro.zanineli/miniforge3/envs/fair-chem/lib/python3.9/site-packages/fairchem/core/models/equiformer_v2/equiformer_v2.py", line 406, in forward
+    graph = self.generate_graph(
+  File "/home/pedro.zanineli/miniforge3/envs/fair-chem/lib/python3.9/site-packages/fairchem/core/models/base.py", line 94, in generate_graph
+    *[
+  File "/home/pedro.zanineli/miniforge3/envs/fair-chem/lib/python3.9/site-packages/fairchem/core/models/base.py", line 95, in <listcomp>
+    radius_graph_pbc(
+  File "/home/pedro.zanineli/miniforge3/envs/fair-chem/lib/python3.9/site-packages/fairchem/core/common/utils.py", line 760, in radius_graph_pbc
+    mask_num_neighbors, num_neighbors_image = get_max_neighbors_mask(
+  File "/home/pedro.zanineli/miniforge3/envs/fair-chem/lib/python3.9/site-packages/fairchem/core/common/utils.py", line 812, in get_max_neighbors_mask
+    max_num_neighbors = num_neighbors.max()
+RuntimeError: CUDA error: no kernel image is available for execution on the device
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
