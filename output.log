@@ -12,3 +12,7 @@ no change     /home/pedro.zanineli/miniforge3/etc/profile.d/conda.csh
 no change     /home/pedro.zanineli/.bashrc
 No action taken.
 cuda
+Downloading GRACE models from 'https://ruhr-uni-bochum.sciebo.de/s/4zVTfzxornWfS4T/download'
+Unpacking model from 'https://ruhr-uni-bochum.sciebo.de/s/4zVTfzxornWfS4T/download'
+GRACE model downloaded to cache /home/pedro.zanineli/.cache/grace/GRACE-2L-OAM_28Jan25
+Model license: Academic Software License
