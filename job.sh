@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=grace
+#SBATCH --job-name=dmd
 #SBATCH --output=output.log
 #SBATCH --error=error.log
 #SBATCH --partition=gpu-pbi  
@@ -10,8 +10,7 @@
 
 conda init
 
-conda activate grace
+conda activate deepmd
 
-python3 1_calculator.py grace
-# CUDA_LAUNCH_BLOCKING=1 python3 /home/pedro.zanineli/phd/inference/1_calculator.py
+python3 1_calculator.py deepmd
 
