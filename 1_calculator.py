@@ -16,7 +16,6 @@ from codecarbon import EmissionsTracker
 warnings.filterwarnings('ignore')
 
 model_name = sys.argv[1]
-# model_name = 'fair-chem'
 
 def change_env(uip):
         activate_cmd = (
@@ -74,12 +73,14 @@ def set_calc(model_name):
 
         # Grace
         elif model_name == "grace":
-                # from tensorpotential.calculator import TPCalculator
-                # calc = TPCalculator('pretrained_models/GRACE-2L-OAM_28Jan25/metadata.yaml')
-
                 from tensorpotential.calculator.foundation_models import grace_fm, GRACEModels
                 calc = grace_fm(GRACEModels.GRACE_2L_OAM_28Jan25)
-                
+               
+        # MatterSim
+        elif model_name == "mattersim":
+                from mattersim.forcefield import MatterSimCalculator
+                calc = MatterSimCalculator(load_path="MatterSim-v1.0.0-5M.pth", device=device)
+
         else:
                 raise ValueError("Model not supported. The list of currently supported models is on etc/README.md")
 
