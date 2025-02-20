@@ -79,6 +79,7 @@ def set_calc(model_name):
 
                 from tensorpotential.calculator.foundation_models import grace_fm, GRACEModels
                 calc = grace_fm(GRACEModels.GRACE_2L_OAM_28Jan25)
+                
         else:
                 raise ValueError("Model not supported. The list of currently supported models is on etc/README.md")
 

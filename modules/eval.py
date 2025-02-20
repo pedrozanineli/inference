@@ -124,10 +124,12 @@ def error_visualization(models):
         error = []
         
         for dft_energy,ml_energy in zip(np.array(dft_energies),np.array(ml_energies)):
-            energy_absolute_error = np.abs(ml_energy - dft_energy)
+            # energy_absolute_error = np.abs(ml_energy - dft_energy)
+            energy_absolute_error = ml_energy - dft_energy
             error.append(energy_absolute_error)
         
         keys.append(model_key)
         errors.append(error)
-    
+        
+    plt.violinplot([i for i in errors],showextrema=False)
     plt.boxplot([i for i in errors],tick_labels=keys)
