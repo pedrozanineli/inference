@@ -133,3 +133,65 @@ def error_visualization(models):
         
     plt.violinplot([i for i in errors],showextrema=False)
     plt.boxplot([i for i in errors],tick_labels=keys)
+
+def latex_table_results(energies,forces,models,non_compliant):
+
+    rows = []
+    for model_energy,model_force,model,n in zip(energies,forces,models,non_compliant):
+        
+        e_r2,e_mae,e_rmse = eval_report(model_energy[0],model_energy[1])
+        f_r2,f_mae,f_rmse = eval_report(model_force[0],model_force[1])
+
+        row = [n,model,round(e_r2,4),round(e_mae,4),round(e_rmse,4),round(f_r2,4),round(f_mae,4),round(f_rmse,4)]
+        rows.append(row)
+
+    bold_indexes = []
+    for i,row in enumerate(rows):
+
+        if i == 0:
+            e_r2,e_mae,e_rmse,f_r2,f_mae,f_rmse = row[2:]
+            bold_indexes = 6*[0]
+        else:
+            e_r2_aux,e_mae_aux,e_rmse_aux,f_r2_aux,f_mae_aux,f_rmse_aux = row[2:]
+
+        def compare(curr,aux,curr_index,index,minor=True):
+            if minor:
+                if curr > aux:
+                    curr = aux
+                    bold_indexes[curr_index] = index
+            else:
+                if curr < aux:
+                    curr = aux
+                    bold_indexes[curr_index] = index
+            return curr
+        
+        if i != 0:
+            e_r2 = compare(e_r2,e_r2_aux,0,i,minor=False)
+            e_mae = compare(e_mae,e_mae_aux,1,i,minor=True)
+            e_rmse = compare(e_rmse,e_rmse_aux,2,i,minor=True)
+            f_r2 = compare(f_r2,f_r2_aux,3,i,minor=False)
+            f_mae = compare(f_mae,f_mae_aux,4,i,minor=True)
+            f_rmse = compare(f_rmse,f_rmse_aux,5,i,minor=True)
+            
+    for i,row in enumerate(rows):
+        
+        n,model,e_r2,e_mae,e_rmse,f_r2,f_mae,f_rmse = row
+        
+        for j,value in enumerate(row):
+
+            if j == 0: 
+                if n: print(f'S-{model}',end=' & ')
+                else: print(f'{model}',end=' & ')
+            
+            if j > 1:
+                if i == bold_indexes[j-2]:
+                    if j+1 != len(row): print('\\textbf','{',value,'}',end=' & ')
+                    else: print('\\textbf','{',value,'}',end='')
+                elif j+1 != len(row): print(value,end=' & ')
+                else: print(value,end='')
+
+            # elif j != 0:
+                # if j-1 == len(row): print(value,end=' & ')
+                # else: print(value)
+
+        print()

@@ -1,12 +1,12 @@
 import os
 import pickle
 
-files = os.listdir('pt1')
+files = os.listdir('pt2')
 
 for file in files:
     flattened_values = []
-    output_file = f'pt1_{file}'
-    with open(f'pt1/{file}', 'rb') as f:
+    output_file = f'pt2_{file}'
+    with open(f'pt2/{file}', 'rb') as f:
         while True:
             try:
                 data = pickle.load(f)  # Carrega um objeto do arquivo
