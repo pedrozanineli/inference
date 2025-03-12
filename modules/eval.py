@@ -9,6 +9,15 @@ colors = ['#66c5cc', '#f6cf71', '#f89c74', '#dcb0f2', '#87c55f', '#9eb9f3', '#fe
 symbols = ['o', 's', '^', 'v', '<', '>', 'p', '*', 'D', 'x']
 code = list(itertools.zip_longest(colors, symbols, fillvalue=None))
 
+from matplotlib import font_manager
+
+font_path = 'modules/NotoSansMath-Regular.ttf'
+font_manager.fontManager.addfont(font_path)
+prop = font_manager.FontProperties(fname=font_path)
+
+plt.rcParams['font.family'] = 'sans-serif'
+plt.rcParams['font.sans-serif'] = prop.get_name()
+
 def load(path):
     file = open(path,'rb')
     load = pickle.load(file)
@@ -33,15 +42,18 @@ def forces_load(forces):
         z.append(forces_atom[2])
     return force_module,x,y,z
 
+def forces_treatment(X,y):
+    X_aux,y_aux = [],[]
+    for y_i in range(len(y)):
+        if y[y_i] < 35:
+            X_aux.append(X[y_i])
+            y_aux.append(y[y_i])
+    X,y = X_aux.copy(),y_aux.copy()
+    return X,y
+
 def parity_plot(X,y,label,unit,style=0,model=None):
 
-    # reg = LinearRegression().fit(X.reshape(-1, 1),y)
-    # r2 = reg.score(X.reshape(-1, 1),y)
-    # linreg_x = np.linspace(0.8*min(X),1.2*max(X),len(y))
-    # linreg_y = reg.predict(linreg_x.reshape(-1, 1))
-    # plt.plot(linreg_x,linreg_y,color='gray',lw=0.75,linestyle='--')
-
-    line_points = np.linspace(-1e4,1e4,2)
+    line_points = np.linspace(-1e3,1e3,2)
     plt.plot(line_points,line_points,color='gray',lw=1.2,linestyle='--',alpha=0.7)
     
     rmse = metrics.root_mean_squared_error(X,y)
@@ -58,12 +70,6 @@ def parity_plot(X,y,label,unit,style=0,model=None):
     plt.legend()
 
 def coded_parity_plot(X,y,label,ref):
-
-    # reg = LinearRegression().fit(X.reshape(-1, 1),y)
-    # r2 = reg.score(X.reshape(-1, 1),y)
-    # linreg_x = np.linspace(min(X),max(X),10)
-    # linreg_y = reg.predict(linreg_x.reshape(-1, 1))
-    # plt.plot(linreg_x,linreg_y,color='gray',lw=0.75) #,label=f'Rˆ2={round(r2,5)}')
 
     line_points = np.linspace(0.9*min(y),1.1*max(y),10)
     plt.plot(line_points,line_points,color='gray',lw=0.75) #,label=f'Rˆ2={round(r2,5)}')
@@ -134,25 +140,25 @@ def error_visualization(models):
     plt.violinplot([i for i in errors],showextrema=False)
     plt.boxplot([i for i in errors],tick_labels=keys)
 
-def latex_table_results(energies,forces,models,non_compliant):
+def latex_table_results(energies,forces,models,database,params,non_compliant):
 
     rows = []
-    for model_energy,model_force,model,n in zip(energies,forces,models,non_compliant):
+    for model_energy,model_force,model,n,db,param in zip(energies,forces,models,non_compliant,database,params):
         
         e_r2,e_mae,e_rmse = eval_report(model_energy[0],model_energy[1])
         f_r2,f_mae,f_rmse = eval_report(model_force[0],model_force[1])
 
-        row = [n,model,round(e_r2,4),round(e_mae,4),round(e_rmse,4),round(f_r2,4),round(f_mae,4),round(f_rmse,4)]
+        row = [n,model,db,param,round(e_r2,4),round(e_mae,4),round(e_rmse,4),round(f_r2,4),round(f_mae,4),round(f_rmse,4)]
         rows.append(row)
 
     bold_indexes = []
     for i,row in enumerate(rows):
 
         if i == 0:
-            e_r2,e_mae,e_rmse,f_r2,f_mae,f_rmse = row[2:]
+            e_r2,e_mae,e_rmse,f_r2,f_mae,f_rmse = row[4:]
             bold_indexes = 6*[0]
         else:
-            e_r2_aux,e_mae_aux,e_rmse_aux,f_r2_aux,f_mae_aux,f_rmse_aux = row[2:]
+            e_r2_aux,e_mae_aux,e_rmse_aux,f_r2_aux,f_mae_aux,f_rmse_aux = row[4:]
 
         def compare(curr,aux,curr_index,index,minor=True):
             if minor:
@@ -175,20 +181,20 @@ def latex_table_results(energies,forces,models,non_compliant):
             
     for i,row in enumerate(rows):
         
-        n,model,e_r2,e_mae,e_rmse,f_r2,f_mae,f_rmse = row
+        n,model,db,param,e_r2,e_mae,e_rmse,f_r2,f_mae,f_rmse = row
         
         for j,value in enumerate(row):
 
             if j == 0: 
-                if n: print(f'S-{model}',end=' & ')
+                if n: print(f'{model} $\star$',end=' & ')
                 else: print(f'{model}',end=' & ')
             
             if j > 1:
-                if i == bold_indexes[j-2]:
+                if i == bold_indexes[j-4]:
                     if j+1 != len(row): print('\\textbf','{',value,'}',end=' & ')
-                    else: print('\\textbf','{',value,'}',end='')
+                    else: print('\\textbf','{',value,'}',end='\\\\')
                 elif j+1 != len(row): print(value,end=' & ')
-                else: print(value,end='')
+                else: print(value,end='\\\\')
 
             # elif j != 0:
                 # if j-1 == len(row): print(value,end=' & ')
