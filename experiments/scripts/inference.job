@@ -1,0 +1,19 @@
+#!/bin/bash
+#SBATCH --nodes 1
+#SBATCH --cpus-per-task 5
+#SBATCH --time 72:00:00
+#SBATCH --job-name m3
+#SBATCH --partition=gpu
+#SBATCH --gres=gpu:1
+
+source ~/.bashrc
+
+# envs=("sevenn" "deepmd" "grace" "mattersim" "mace" "orb")
+envs=("orb")
+
+for env in "${envs[@]}"; do
+	echo "activating $env..."
+	conda activate "$env"
+	python3 1_inference.py "$env"
+	conda deactivate
+done

@@ -18,9 +18,11 @@ class Calculator:
             """
 
             from deepmd.calculator import DP
-            if not model_name: model_name = 'DPA3-v2-OpenLAM'        
-            return DP(model=f'pretrained_models/{model_name}')
             
+            if model_name == 'DPA3-v2-OpenLAM' or not model_name:
+                return DP(model='../pretrained_models/dpa3-openlam.pth')
+            else:
+                return DP(model='../pretrained_models/dpa3-mptrj.pth')
 
         elif calculator_name == "fair-chem":
 

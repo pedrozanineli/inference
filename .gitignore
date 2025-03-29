@@ -1,3 +1,4 @@
 .DS_Store
-pretrained_models/
-Dataset_ZrO2/
+./pretrained_models/
+./experiments/zirconium-dioxide/dataset_zro2
+./pretrained_models

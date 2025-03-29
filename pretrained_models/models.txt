@@ -1,0 +1,3 @@
+dpa3-openlam.pth: wget https://bohrium-api.dp.tech/ds-dl/dpa3openlam-74ng-v3.zip
+dpa3-mptrj: wget https://bohrium-api.dp.tech/ds-dl/matbench-submit-DPA3mptraj-ictz-v2.zip
+
