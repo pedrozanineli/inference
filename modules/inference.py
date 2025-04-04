@@ -24,7 +24,7 @@ default_calculator = {
     "sevenn": 'SevenNet-MF-ompa',
 }
 
-def inference(path,calculator,model=None,track=False):
+def inference(path,saving_path,calc,calculator,model=None,track=False):
 
     def forces_calculator(molecule):
         forces = []
@@ -36,14 +36,15 @@ def inference(path,calculator,model=None,track=False):
         return forces
     
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    print(f"using device {device}...")
+    # print(f"using device {device}...")
 
     files = os.listdir(path)
     if '.ipynb_checkpoints' in files: files.remove('.ipynb_checkpoints')
     
     if not model: model = default_calculator[calculator]
     
-    results_path = f'results/{calculator}/{model}'
+    # mudar aqui
+    results_path = f'{saving_path}/results/{calculator}/{model}'
     if not os.path.exists(results_path): os.makedirs(results_path)
 
     real_energies,predicted_energies = [],[]
@@ -65,7 +66,7 @@ def inference(path,calculator,model=None,track=False):
             real_energy = structure.get_potential_energy()
             real_force = forces_calculator(structure)
 
-            structure.calc = calculator
+            structure.calc = calc
             predicted_energy = structure.get_potential_energy()
             predicted_force = forces_calculator(structure)
 

@@ -20,9 +20,9 @@ class Calculator:
             from deepmd.calculator import DP
             
             if model_name == 'DPA3-v2-OpenLAM' or not model_name:
-                return DP(model='../pretrained_models/dpa3-openlam.pth')
+                return DP(model='../../pretrained_models/dpa3-openlam.pth')
             else:
-                return DP(model='../pretrained_models/dpa3-mptrj.pth')
+                return DP(model='../../pretrained_models/dpa3-mptrj.pth')
 
         elif calculator_name == "fair-chem":
 
@@ -69,8 +69,10 @@ class Calculator:
             """
             
             from mace.calculators import mace_mp
-            if not model_name: model_name = "medium-mpa-0"
-            return mace_mp(model=model_name, device=device.type, default_dtype='float64')
+            # if not model_name: model_name = "medium"
+            # elif model_name == 'MACE-MP-0': model_name = 'https://github.com/ACEsuit/mace-mp/releases/download/mace_mp_0/2023-12-03-mace-128-L1_epoch-199.model'
+            
+            return mace_mp(model='medium', device=device.type, default_dtype='float64')
 
         elif calculator_name == "mattersim":
 
