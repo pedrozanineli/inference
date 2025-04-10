@@ -69,7 +69,8 @@ class Calculator:
             """
             
             from mace.calculators import mace_mp
-            # if not model_name: model_name = "medium"
+            if not model_name: model_name = "medium"
+            
             # elif model_name == 'MACE-MP-0': model_name = 'https://github.com/ACEsuit/mace-mp/releases/download/mace_mp_0/2023-12-03-mace-128-L1_epoch-199.model'
             
             return mace_mp(model='medium', device=device.type, default_dtype='float64')

@@ -11,8 +11,7 @@ full_models = {
     # "deepmd": ['DPA3-v2-OpenLAM', 'DPA3-v2-MPtrj'],
     # "grace": ['GRACE-2L-OAM', 'GRACE-1L-OAM', 'GRACE-2L-MPtrj'],
     
-    "grace": ['GRACE-1L-OAM', 'GRACE-2L-MPtrj'],
-    "mace": ['MACE-MPA-0', 'MACE-MP-0'],
+    # "mace": ['MACE-MPA-0', 'MACE-MP-0'],
     "mattersim": ['MatterSim-v1.0.0-5M'],
     "orb": ['ORB', 'ORB MPTrj'],
     "sevenn": ['SevenNet-MF-ompa', 'SevenNet-l3i5'],

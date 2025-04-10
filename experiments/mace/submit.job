@@ -1,0 +1,13 @@
+#!/bin/bash
+#SBATCH --job-name=mace
+#SBATCH --output=output.log
+#SBATCH --error=error.log
+#SBATCH --partition=gpu  
+#SBATCH --time=08:00:00
+#SBATCH --mem=8G
+#SBATCH --cpus-per-task=4
+
+source ~/.bashrc
+conda activate mace
+
+python3 run.py small

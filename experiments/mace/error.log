@@ -1,0 +1,28 @@
+Traceback (most recent call last):
+  File "/mnt/beegfs/home/p.zanineli/work/inference/experiments/mace/run.py", line 105, in <module>
+    set_calc(model_name)
+  File "/mnt/beegfs/home/p.zanineli/work/inference/experiments/mace/run.py", line 53, in set_calc
+    calc = mace_mp(model=model_name,device='cuda',default_dtype='float64')
+  File "/home/p.zanineli/miniconda3/envs/mace/lib/python3.9/site-packages/mace/calculators/foundations_models.py", line 171, in mace_mp
+    mace_calc = MACECalculator(
+  File "/home/p.zanineli/miniconda3/envs/mace/lib/python3.9/site-packages/mace/calculators/mace.py", line 138, in __init__
+    self.models = [
+  File "/home/p.zanineli/miniconda3/envs/mace/lib/python3.9/site-packages/mace/calculators/mace.py", line 139, in <listcomp>
+    torch.load(f=model_path, map_location=device)
+  File "/home/p.zanineli/miniconda3/envs/mace/lib/python3.9/site-packages/torch/serialization.py", line 1471, in load
+    return _load(
+  File "/home/p.zanineli/miniconda3/envs/mace/lib/python3.9/site-packages/torch/serialization.py", line 1964, in _load
+    result = unpickler.load()
+  File "/home/p.zanineli/miniconda3/envs/mace/lib/python3.9/site-packages/torch/serialization.py", line 1928, in persistent_load
+    typed_storage = load_tensor(
+  File "/home/p.zanineli/miniconda3/envs/mace/lib/python3.9/site-packages/torch/serialization.py", line 1900, in load_tensor
+    wrap_storage=restore_location(storage, location),
+  File "/home/p.zanineli/miniconda3/envs/mace/lib/python3.9/site-packages/torch/serialization.py", line 1801, in restore_location
+    return default_restore_location(storage, map_location)
+  File "/home/p.zanineli/miniconda3/envs/mace/lib/python3.9/site-packages/torch/serialization.py", line 693, in default_restore_location
+    result = fn(storage, location)
+  File "/home/p.zanineli/miniconda3/envs/mace/lib/python3.9/site-packages/torch/serialization.py", line 631, in _deserialize
+    device = _validate_device(location, backend_name)
+  File "/home/p.zanineli/miniconda3/envs/mace/lib/python3.9/site-packages/torch/serialization.py", line 600, in _validate_device
+    raise RuntimeError(
+RuntimeError: Attempting to deserialize object on a CUDA device but torch.cuda.is_available() is False. If you are running on a CPU-only machine, please use torch.load with map_location=torch.device('cpu') to map your storages to the CPU.
