@@ -1,28 +1,1 @@
-Traceback (most recent call last):
-  File "/mnt/beegfs/home/p.zanineli/work/inference/experiments/mace/run.py", line 105, in <module>
-    set_calc(model_name)
-  File "/mnt/beegfs/home/p.zanineli/work/inference/experiments/mace/run.py", line 53, in set_calc
-    calc = mace_mp(model=model_name,device='cuda',default_dtype='float64')
-  File "/home/p.zanineli/miniconda3/envs/mace/lib/python3.9/site-packages/mace/calculators/foundations_models.py", line 171, in mace_mp
-    mace_calc = MACECalculator(
-  File "/home/p.zanineli/miniconda3/envs/mace/lib/python3.9/site-packages/mace/calculators/mace.py", line 138, in __init__
-    self.models = [
-  File "/home/p.zanineli/miniconda3/envs/mace/lib/python3.9/site-packages/mace/calculators/mace.py", line 139, in <listcomp>
-    torch.load(f=model_path, map_location=device)
-  File "/home/p.zanineli/miniconda3/envs/mace/lib/python3.9/site-packages/torch/serialization.py", line 1471, in load
-    return _load(
-  File "/home/p.zanineli/miniconda3/envs/mace/lib/python3.9/site-packages/torch/serialization.py", line 1964, in _load
-    result = unpickler.load()
-  File "/home/p.zanineli/miniconda3/envs/mace/lib/python3.9/site-packages/torch/serialization.py", line 1928, in persistent_load
-    typed_storage = load_tensor(
-  File "/home/p.zanineli/miniconda3/envs/mace/lib/python3.9/site-packages/torch/serialization.py", line 1900, in load_tensor
-    wrap_storage=restore_location(storage, location),
-  File "/home/p.zanineli/miniconda3/envs/mace/lib/python3.9/site-packages/torch/serialization.py", line 1801, in restore_location
-    return default_restore_location(storage, map_location)
-  File "/home/p.zanineli/miniconda3/envs/mace/lib/python3.9/site-packages/torch/serialization.py", line 693, in default_restore_location
-    result = fn(storage, location)
-  File "/home/p.zanineli/miniconda3/envs/mace/lib/python3.9/site-packages/torch/serialization.py", line 631, in _deserialize
-    device = _validate_device(location, backend_name)
-  File "/home/p.zanineli/miniconda3/envs/mace/lib/python3.9/site-packages/torch/serialization.py", line 600, in _validate_device
-    raise RuntimeError(
-RuntimeError: Attempting to deserialize object on a CUDA device but torch.cuda.is_available() is False. If you are running on a CPU-only machine, please use torch.load with map_location=torch.device('cpu') to map your storages to the CPU.
+  0%|          | 0/35 [00:00<?, ?it/s]  3%|▎         | 1/35 [00:18<10:44, 18.96s/it]  6%|▌         | 2/35 [00:21<05:05,  9.25s/it]  9%|▊         | 3/35 [00:26<03:58,  7.45s/it] 11%|█▏        | 4/35 [03:25<38:43, 74.94s/it] 14%|█▍        | 5/35 [03:30<24:59, 49.99s/it] 17%|█▋        | 6/35 [03:31<15:58, 33.04s/it] 20%|██        | 7/35 [03:34<10:55, 23.40s/it] 23%|██▎       | 8/35 [04:34<15:46, 35.05s/it] 26%|██▌       | 9/35 [05:58<21:45, 50.21s/it] 29%|██▊       | 10/35 [06:01<14:53, 35.72s/it] 31%|███▏      | 11/35 [06:05<10:27, 26.13s/it] 34%|███▍      | 12/35 [06:06<07:01, 18.31s/it] 37%|███▋      | 13/35 [06:13<05:26, 14.85s/it] 40%|████      | 14/35 [06:21<04:32, 12.97s/it] 43%|████▎     | 15/35 [09:21<21:06, 63.32s/it] 46%|████▌     | 16/35 [09:25<14:20, 45.26s/it] 49%|████▊     | 17/35 [09:28<09:46, 32.61s/it] 51%|█████▏    | 18/35 [13:48<28:38, 101.07s/it] 54%|█████▍    | 19/35 [13:53<19:16, 72.31s/it]  57%|█████▋    | 20/35 [14:09<13:50, 55.40s/it] 60%|██████    | 21/35 [14:17<09:34, 41.05s/it] 63%|██████▎   | 22/35 [14:25<06:43, 31.05s/it] 69%|██████▊   | 24/35 [14:33<03:23, 18.52s/it] 71%|███████▏  | 25/35 [15:54<05:40, 34.04s/it] 74%|███████▍  | 26/35 [16:00<04:01, 26.84s/it] 77%|███████▋  | 27/35 [16:14<03:05, 23.25s/it] 80%|████████  | 28/35 [16:14<01:57, 16.85s/it] 83%|████████▎ | 29/35 [16:15<01:13, 12.30s/it] 86%|████████▌ | 30/35 [16:16<00:44,  8.88s/it] 89%|████████▊ | 31/35 [16:16<00:25,  6.38s/it] 91%|█████████▏| 32/35 [16:21<00:17,  5.85s/it] 94%|█████████▍| 33/35 [17:36<00:52, 26.50s/it] 97%|█████████▋| 34/35 [17:41<00:19, 19.93s/it]100%|██████████| 35/35 [17:48<00:00, 16.24s/it]100%|██████████| 35/35 [17:48<00:00, 30.53s/it]

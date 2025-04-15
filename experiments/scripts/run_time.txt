@@ -7,3 +7,5 @@ mace-MACE-MPA-0: 73604.928267
 mattersim-MatterSim-v1.0.0-5M: 72200.897121
 orb-ORB: 71147.176530
 orb-ORB: 70798.749248
+sevenn-SevenNet-MF-ompa: 76619.467005
+sevenn-SevenNet-l3i5: 76717.712189

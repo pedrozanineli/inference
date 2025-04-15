@@ -3,11 +3,14 @@
 #SBATCH --output=output.log
 #SBATCH --error=error.log
 #SBATCH --partition=gpu  
+#SBATCH --gres=gpu:1
 #SBATCH --time=08:00:00
 #SBATCH --mem=8G
-#SBATCH --cpus-per-task=4
+
+export CUDA_VISIBLE_DEVICES=$(nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits \
+    | awk '{print NR-1, $1}' | sort -nk2 | head -n1 | cut -d' ' -f1)
 
 source ~/.bashrc
 conda activate mace
 
-python3 run.py small
+python3 run.py large

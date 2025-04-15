@@ -1,0 +1,11 @@
+cuda
+cuequivariance or cuequivariance_torch is not available. Cuequivariance acceleration will be disabled.
+Using Materials Project MACE for MACECalculator with /home/p.zanineli/.cache/mace/20231203mace128L1_epoch199model
+Using float64 for MACECalculator, which is slower but more accurate. Recommended for geometry optimization.
+energy (ev/atom)
+0.9201152653 0.1234356398797184 0.13084440603298172
+
+forces (ev/A)
+0.1781584564 0.45273613897741444 0.6727927864178971
+
+7.608522891998291

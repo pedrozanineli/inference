@@ -11,6 +11,7 @@ from ase import Atoms
 from tqdm import tqdm
 from ase.io import read
 from ase.build import bulk
+from sklearn import metrics
 
 warnings.filterwarnings('ignore')
 
@@ -45,14 +46,15 @@ def forces_load(forces):
 
 def set_calc(model_name):
 
-        # device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        device = torch.device('cpu')
+        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         print(device)
 
         from mace.calculators import mace_mp
         calc = mace_mp(model=model_name,device='cuda',default_dtype='float64')
 
-        files = os.listdir('../zirconium_dioxide/dataset_zro2')
+        files = os.listdir('../zirconium-dioxide/dataset_zro2')
+        if '.ipynb_checkpoints' in files: files.remove('.ipynb_checkpoints')
+
         real_energies,predicted_energies = [],[]
         real_forces,predicted_forces = [],[]
 
@@ -64,7 +66,7 @@ def set_calc(model_name):
         for file in tqdm(range(len(files))):
 
                 begin = time.time()
-                structures = read(f'../zirconium_dioxide/dataset_zro2/{files[file]}',index=':')
+                structures = read(f'../zirconium-dioxide/dataset_zro2/{files[file]}',index=':')
                 for struc_index,structure in enumerate(structures):
 
                         real_energy = structure.get_potential_energy()
@@ -84,7 +86,7 @@ def set_calc(model_name):
         e_r2,e_mae,e_rmse = eval_report(predicted_energies,real_energies)
 
         p_force_module,_,_,_ = forces_load(predicted_forces)
-        t_force_module,_,_,_ = forces_load(predicted_forces)
+        t_force_module,_,_,_ = forces_load(real_forces)
        
         f_r2,f_mae,f_rmse = eval_report(p_force_module,t_force_module)
         
