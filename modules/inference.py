@@ -45,8 +45,10 @@ def inference(path,saving_path,calc,calculator,model=None,track=False):
     
     # mudar aqui
     results_path = f'{saving_path}/results/{calculator}/{model}'
+    print(results_path)
     if not os.path.exists(results_path): os.makedirs(results_path)
 
+    structure_infered = []
     real_energies,predicted_energies = [],[]
     real_forces,predicted_forces = [],[]
     
@@ -54,7 +56,7 @@ def inference(path,saving_path,calc,calculator,model=None,track=False):
 
     if track:
         from codecarbon import EmissionsTracker
-        tracker = EmissionsTracker(output_dir='emissions',output_file=f'{calculator}-{model}.csv',allow_multiple_runs=True)
+        tracker = EmissionsTracker(output_dir=f'{saving_path}/results/emissions',output_file=f'{calculator}-{model}.csv',allow_multiple_runs=True,log_level='error')
         tracker.start()
     
     for file in tqdm(range(len(files))):
@@ -70,16 +72,20 @@ def inference(path,saving_path,calc,calculator,model=None,track=False):
             predicted_energy = structure.get_potential_energy()
             predicted_force = forces_calculator(structure)
 
+            structure_infered.append(files[file])
+
             real_energies.append(real_energy/len(structure))
             predicted_energies.append(predicted_energy/len(structure))
 
             real_forces.append(real_force)
             predicted_forces.append(predicted_force)
 
-            with open(f'{results_path}/predicted_energies.pkl','wb') as f: pickle.dump(predicted_energies,f)
-            with open(f'{results_path}/predicted_forces.pkl','wb') as f: pickle.dump(predicted_forces,f)
-            with open(f'{results_path}/dft_forces.pkl','wb') as f: pickle.dump(real_forces,f)
-            with open(f'{results_path}/dft_energies.pkl','wb') as f: pickle.dump(real_energies,f)
+
+    with open(f'{results_path}/structures.pkl','wb') as f: pickle.dump(structure_infered,f)
+    with open(f'{results_path}/predicted_energies.pkl','wb') as f: pickle.dump(predicted_energies,f)
+    with open(f'{results_path}/predicted_forces.pkl','wb') as f: pickle.dump(predicted_forces,f)
+    with open(f'{results_path}/dft_forces.pkl','wb') as f: pickle.dump(real_forces,f)
+    with open(f'{results_path}/dft_energies.pkl','wb') as f: pickle.dump(real_energies,f)
 
     end = time.time()
     total_time = end-begin

@@ -1,2 +1,50 @@
+mace MACE-MPA-0
 using device cuda...
+cuequivariance or cuequivariance_torch is not available. Cuequivariance acceleration will be disabled.
+Using Materials Project MACE for MACECalculator with /home/p.zanineli/.cache/mace/MACE_MPtrj_20229model
+Using float64 for MACECalculator, which is slower but more accurate. Recommended for geometry optimization.
+/home/p.zanineli/work/inference/experiments/zirconium-dioxide/results/mace/MACE-MPA-0
+mace MACE-MP-0
 using device cuda...
+cuequivariance or cuequivariance_torch is not available. Cuequivariance acceleration will be disabled.
+No dtype selected, switching to float32 to match model dtype.
+/home/p.zanineli/work/inference/experiments/zirconium-dioxide/results/mace/MACE-MP-0
+grace GRACE-2L-OAM
+using device cuda...
+Using cached GRACE model from /home/p.zanineli/.cache/grace/GRACE-2L-OAM
+Model license: Academic Software License
+/home/p.zanineli/work/inference/experiments/zirconium-dioxide/results/grace/GRACE-2L-OAM
+grace GRACE-1L-OAM
+using device cuda...
+Using cached GRACE model from /home/p.zanineli/.cache/grace/GRACE-1L-OAM
+Model license: Academic Software License
+/home/p.zanineli/work/inference/experiments/zirconium-dioxide/results/grace/GRACE-1L-OAM
+grace GRACE-2L-MPtrj
+using device cuda...
+Using cached GRACE model from /home/p.zanineli/.cache/grace/GRACE-2L-OAM
+Model license: Academic Software License
+/home/p.zanineli/work/inference/experiments/zirconium-dioxide/results/grace/GRACE-2L-MPtrj
+mattersim MatterSim-v1.0.0-5M
+using device cuda...
+[32m2025-05-01 20:33:12.987[0m | [1mINFO    [0m | [36mmattersim.forcefield.potential[0m:[36mfrom_checkpoint[0m:[36m891[0m - [1mLoading the pre-trained mattersim-v1.0.0-5M.pth model[0m
+/home/p.zanineli/work/inference/experiments/zirconium-dioxide/results/mattersim/MatterSim-v1.0.0-5M
+orb ORB
+using device cuda...
+GPU tensorfloat matmuls precision set to 'high'. This can achieve up to 2x speedup on Nvidia A100 and H100 devices.
+/home/p.zanineli/work/inference/experiments/zirconium-dioxide/results/orb/ORB
+orb ORB-MPTrj
+using device cuda...
+GPU tensorfloat matmuls precision set to 'high'. This can achieve up to 2x speedup on Nvidia A100 and H100 devices.
+/home/p.zanineli/work/inference/experiments/zirconium-dioxide/results/orb/ORB-MPTrj
+sevenn SevenNet-MF-ompa
+using device cuda...
+/home/p.zanineli/work/inference/experiments/zirconium-dioxide/results/sevenn/SevenNet-MF-ompa
+sevenn SevenNet-l3i5
+using device cuda...
+/home/p.zanineli/work/inference/experiments/zirconium-dioxide/results/sevenn/SevenNet-l3i5
+deepmd DPA3-v2-OpenLAM
+using device cuda...
+/home/p.zanineli/work/inference/experiments/zirconium-dioxide/results/deepmd/DPA3-v2-OpenLAM
+deepmd DPA3-v2-MPtrj
+using device cuda...
+/home/p.zanineli/work/inference/experiments/zirconium-dioxide/results/deepmd/DPA3-v2-MPtrj

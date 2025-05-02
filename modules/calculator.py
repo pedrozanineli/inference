@@ -69,11 +69,10 @@ class Calculator:
             """
             
             from mace.calculators import mace_mp
-            if not model_name: model_name = "medium"
-            
-            # elif model_name == 'MACE-MP-0': model_name = 'https://github.com/ACEsuit/mace-mp/releases/download/mace_mp_0/2023-12-03-mace-128-L1_epoch-199.model'
-            
-            return mace_mp(model='medium', device=device.type, default_dtype='float64')
+            from mace.calculators import MACECalculator
+                        
+            if model_name == 'MACE-MP-0': return MACECalculator(model_paths='../../pretrained_models/mace-mp.model', device=device.type)
+            else: return mace_mp(model='large', device=device.type, default_dtype='float64')
 
         elif calculator_name == "mattersim":
 
@@ -109,7 +108,8 @@ class Calculator:
             """
 
             from sevenn.calculator import SevenNetCalculator
-            if not model_name: model_name = '7net-mf-ompa'                
+
+            if not model_name: model_name = '7net-mf-ompa'
             return SevenNetCalculator(model=model_name, modal='mpa')
 
         else:
