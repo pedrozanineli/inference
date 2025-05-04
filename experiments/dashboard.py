@@ -1,8 +1,10 @@
 import pickle
 import os, sys
 import subprocess
+import numpy as np
 import pandas as pd
 import streamlit as st
+from ase.io import read
 import plotly.graph_objects as go
 
 os.chdir('..')
@@ -31,12 +33,14 @@ def prop_dict(structures,prop):
     
     return metrics_dict
 
-path = '/home/p.zanineli/work/inference/experiments/zirconium-dioxide/results'
+# path = '/home/p.zanineli/work/inference/experiments/zirconium-dioxide/results'
+path = '/Users/pedrozanineli/Projects/inference/experiments/zirconium-dioxide/results'
 mlips = os.listdir(path)
 
 if './ipycheckpoints' in mlips: mlips.remove('./ipycheckpoints')
 if 'metrics.csv' in mlips: mlips.remove('metrics.csv')
 if 'emissions' in mlips: mlips.remove('emissions')
+if '.DS_Store' in mlips: mlips.remove('.DS_Store')
 
 model_count = []
 dict_data = {}
@@ -45,6 +49,7 @@ e_metrics_geometries,f_metrics_geometries = {},{}
 
 for mlip in mlips:
     models = os.listdir(f'{path}/{mlip}')
+    if '.DS_Store' in models: models.remove('.DS_Store') 
     
     for model in models:
         
@@ -95,7 +100,7 @@ def set_final_metrics(metrics_geometries):
             
         for geometry in geometries:
 
-            rmse = model_dict[geometry][-1]
+            rmse = model_dict[geometry][-1]*1000
             final_metrics[model].append(rmse)
     
     return final_metrics
@@ -112,37 +117,70 @@ df_energies.columns = geometries
 df_forces = pd.DataFrame(f_results).T
 df_forces.columns = geometries
 
-df_energies.to_csv(f'{path}/geometries_energies.csv',index=False)
-df_forces.to_csv(f'{path}/geometries_forces.csv',index=False)
+df_energies.to_csv(f'/Users/pedrozanineli/Projects/inference/experiments/zirconium-dioxide/geometries_energies.csv',index=False)
+df_forces.to_csv(f'/Users/pedrozanineli/Projects/inference/experiments/zirconium-dioxide/geometries_forces.csv',index=False)
+
+# emissions
+
+count = 0
+strucs = os.listdir('/Users/pedrozanineli/Projects/inference/experiments/zirconium-dioxide/dataset_zro2')
+
+for struc in strucs:
+    total = read(f'/Users/pedrozanineli/Projects/inference/experiments/zirconium-dioxide/dataset_zro2/{struc}',index=':')
+    for s in struc: count += len(struc)
+
+emissions_models = {}
+
+emissions_path = '/Users/pedrozanineli/Projects/inference/experiments/zirconium-dioxide/results/emissions'
+models = os.listdir(emissions_path)
+
+for model in models:
+
+    em = pd.read_csv(f'{emissions_path}/{model}')
+
+    emissions_models[model[:-4]] = [
+        float(list(em['duration'].values)[0] * 60/count),
+        float(list(em['emissions'].values)[0]),
+        float(list(em['energy_consumed'].values)[0]),
+        float(list(em['gpu_power'].values)[0])
+    ]
+
+emissions_df = pd.DataFrame(emissions_models).T
+emissions_df.columns = ['Atoms/Second', 'Emissions (gCO2eq)', 'Energy (kWh)', 'GPU Power (W)']
+
+emissions_df.to_csv(f'/Users/pedrozanineli/Projects/inference/experiments/zirconium-dioxide/emissions_model.csv',index=False)
 
 #
 
 df = pd.DataFrame(dict_data).T
-df.columns = ['e_r2','e_mae','e_rmse','f_r2','f_mae','f_rmse']
+df.columns = ['R2','MAE','RMSE','R2','MAE','RMSE']
 
 df = df.reset_index().rename(columns={'index': 'Name'})
 
-df.insert(1, 'Label', model_count)
+df.insert(1, 'Org', model_count)
 
 multi_columns = [
-    ('Model', 'Name'), ('Model', 'Label'),
-    ('Energy', 'e_r2'), ('Energy', 'e_mae'), ('Energy', 'e_rmse'),
-    ('Forces', 'f_r2'), ('Forces', 'f_mae'), ('Forces', 'f_rmse')
+    ('Model', 'Name'), ('Model', 'Org'),
+    ('Energy', 'R2'), ('Energy', 'MAE'), ('Energy', 'RMSE'),
+    ('Forces', 'R2'), ('Forces', 'MAE'), ('Forces', 'RMSE')
 ]
 
 df.columns = pd.MultiIndex.from_tuples(multi_columns)
+
+# df[df.select_dtypes(include=['number']).columns] *= 1000
+
+df[('Energy', 'RMSE')] *= 1000
+df[('Forces', 'RMSE')] *= 1000
 
 df.to_csv(f'{path}/metrics.csv',index=False)
 
 st.set_page_config(layout='wide')
 
-st.title('zirconium-dioxide')
-
-st.subheader('metrics')
+st.title('ZrO2 - MLIPs Inference')
 
 numeric_columns = [
-    ('Energy', 'e_r2'), ('Energy', 'e_mae'), ('Energy', 'e_rmse'),
-    ('Forces', 'f_r2'), ('Forces', 'f_mae'), ('Forces', 'f_rmse')
+    ('Energy', 'R2'), ('Energy', 'MAE'), ('Energy', 'RMSE'),
+    ('Forces', 'R2'), ('Forces', 'MAE'), ('Forces', 'RMSE')
 ]
 
 format_dict = {col: '{:.4f}' for col in numeric_columns}
@@ -153,12 +191,30 @@ styled_df = (
     .background_gradient(subset=numeric_columns, cmap='Blues')
 )
 
+st.markdown('### Overall performance')
 st.dataframe(styled_df, use_container_width=True)
 
+#
+
+col3, col4 = st.columns(2)
+
+with col3:
+    st.markdown('### Energies RMSE (meV/atom)')
+    st.dataframe(df_energies.style.format('{:.4f}').background_gradient(cmap='Blues'), use_container_width=True)
+
+with col4:
+    st.markdown('### Forces RMSE (meV/Å)')
+    st.dataframe(df_forces.style.format('{:.4f}').background_gradient(cmap='Blues'), use_container_width=True)
+
+#
+
+st.markdown('### Emissions')
+st.dataframe(emissions_df.style.format('{:.4f}').background_gradient(cmap='Blues'), use_container_width=True)
+
+#
 
 col1, col2 = st.columns(2)
 with col1:
-    st.subheader('energies')
 
     fig_energy = go.Figure()
 
@@ -181,16 +237,16 @@ with col1:
     ))
 
     fig_energy.update_layout(
-        xaxis_title='predicted energy',
-        yaxis_title='true energy',
+        xaxis_title='Predicted Energy (meV/atom)',
+        yaxis_title='True Energy (meV/atom)',
         height=500,
         legend_title='model'
     )
 
+    st.markdown('### Energies Parity Plot')
     st.plotly_chart(fig_energy, use_container_width=True)
 
 with col2:
-    st.subheader('forces')
 
     fig_forces = go.Figure()
 
@@ -213,10 +269,11 @@ with col2:
     ))
 
     fig_forces.update_layout(
-        xaxis_title='predicted force',
-        yaxis_title='true force',
+        xaxis_title='Predicted Force (meV/Å)',
+        yaxis_title='True Force (mev/Å)',
         height=500,
         legend_title='model'
     )
 
+    st.markdown('### Forces Parity Plot')
     st.plotly_chart(fig_forces, use_container_width=True)
