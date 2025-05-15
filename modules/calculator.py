@@ -24,7 +24,7 @@ class Calculator:
             else:
                 return DP(model='../../pretrained_models/dpa3-mptrj.pth')
 
-        elif calculator_name == "fair-chem":
+        elif calculator_name == "fair-chem-v2":
 
             """
             available models:
@@ -38,18 +38,9 @@ class Calculator:
             if not specified, eqV2 M
             """
 
-            from fairchem.core import OCPCalculator
-            
-            # if not model_name: model_name = 'esen_30m_mptrj'
-
-            # return OCPCalculator(
-            #     model_name=f"{model_name}.pt",
-            #     local_cache="pretrained_models",
-            #     cpu=(device.type == 'cpu'),
-            # )
-
-            # return OCPCalculator(checkpoint_path=f'../../pretrained_models/{model_name}.pt',cpu=(device.type == 'cpu'))
-            return OCPCalculator(checkpoint_path=f'../../pretrained_models/{model_name}.pt',cpu=False)
+            from fairchem.core import FAIRChemCalculator
+            calc = FAIRChemCalculator(hf_hub_filename="uma_sm.pt", device="cuda", task_name="oc20")
+            return calc
 
         elif calculator_name == "grace":
 

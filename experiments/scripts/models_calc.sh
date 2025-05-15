@@ -18,7 +18,9 @@ declare -A full_models
 # full_models["orb"]="ORB|ORB-MPTrj"
 # full_models["sevenn"]="SevenNet-MF-ompa|SevenNet-l3i5"
 
-full_models["orb"]="ORB-V3"
+# full_models["orb"]="ORB-V3"
+
+full_models["fair-chem-v2"]="UMA-Small"
 
 source ~/.bashrc
 

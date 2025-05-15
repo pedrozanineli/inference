@@ -14,11 +14,11 @@ from matplotlib import font_manager
 import os
 
 font_path = './modules/NotoSansMath-Regular.ttf'
-font_manager.fontManager.addfont(font_path)
-prop = font_manager.FontProperties(fname=font_path)
+# font_manager.fontManager.addfont(font_path)
+# prop = font_manager.FontProperties(fname=font_path)
 
-plt.rcParams['font.family'] = 'sans-serif'
-plt.rcParams['font.sans-serif'] = prop.get_name()
+# plt.rcParams['font.family'] = 'sans-serif'
+# plt.rcParams['font.sans-serif'] = prop.get_name()
 
 def load(path):
     file = open(path,'rb')

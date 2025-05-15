@@ -11,3 +11,4 @@ sevenn-SevenNet-l3i5: 1231.188514
 deepmd-DPA3-v2-OpenLAM: 615.020387
 deepmd-DPA3-v2-MPtrj: 1528.307616
 orb-ORB-V3: 503.362565
+fair-chem-v2-UMA-Small: 1846.345987

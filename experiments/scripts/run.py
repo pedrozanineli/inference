@@ -20,7 +20,7 @@ calc = Calculator.get_calculator(calculator,model)
 path = '/mnt/md0/home/pedro.zanineli/work/inference/experiments/zirconium-dioxide/dataset_zro2'
 save_path = '/mnt/md0/home/pedro.zanineli/work/inference/experiments/zirconium-dioxide'
 
-# inference(path,save_path,calc,calculator,model=model,track=True)
+inference(path,save_path,calc,calculator,model=model,track=False)
 
 # from ase.build import bulk
 # a3 = bulk('Cu', 'fcc', a=3.6, cubic=True)
