@@ -30,6 +30,8 @@ class Calculator:
             available models:
             - eSEN-30M-OAM
             - eSEN-30M-MP
+            
+            not avaliable:
             - eqV2 M
             - eqV2 S DeNS
 
@@ -37,13 +39,18 @@ class Calculator:
             """
 
             from fairchem.core import OCPCalculator
-            if not model_name: model_name = 'eqV2 M'
-            return OCPCalculator(
-                model_name=model_name,
-                local_cache="pretrained_models",
-                cpu=(device.type == 'cpu'),
-            )
-        
+            
+            # if not model_name: model_name = 'esen_30m_mptrj'
+
+            # return OCPCalculator(
+            #     model_name=f"{model_name}.pt",
+            #     local_cache="pretrained_models",
+            #     cpu=(device.type == 'cpu'),
+            # )
+
+            # return OCPCalculator(checkpoint_path=f'../../pretrained_models/{model_name}.pt',cpu=(device.type == 'cpu'))
+            return OCPCalculator(checkpoint_path=f'../../pretrained_models/{model_name}.pt',cpu=False)
+
         elif calculator_name == "grace":
 
             """
