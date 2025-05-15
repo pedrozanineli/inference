@@ -53,7 +53,7 @@ def forces_treatment(X,y):
     X,y = X_aux.copy(),y_aux.copy()
     return X,y
 
-def parity_plot(X,y,label,unit,style=0,model=None):
+def parity_plot(X,y,label,unit,style=0,model=None,legend=True):
 
     line_points = np.linspace(-1e3,1e3,2)
     plt.plot(line_points,line_points,color='gray',lw=1.2,linestyle='--',alpha=0.7)
@@ -63,13 +63,15 @@ def parity_plot(X,y,label,unit,style=0,model=None):
     style_color,style_symbol = code[style]
 
     if model != None:
-        plt.scatter(X, y,s=18,color=style_color,marker=style_symbol,alpha=0.25,label=f'{model} (RMSE={round(rmse,2)} {unit})')
+        # plt.scatter(X, y,s=18,color=style_color,marker=style_symbol,alpha=0.25,label=f'{model} (RMSE={round(rmse,2)} {unit})')
+        plt.scatter(X, y,s=18,color=style_color,marker=style_symbol,alpha=0.5,label=f'{model}')
     else:
         plt.scatter(X, y,s=18,color=style_color,marker=style_symbol,alpha=0.25,label=f'RMSE={round(rmse,2)} {unit}')
 
-    plt.ylabel(f'ML Predicted {label}')
-    plt.xlabel(f'DFT {label}')
-    plt.legend()
+    plt.ylabel(f'ML Predicted {label}',fontsize=14)
+    plt.xlabel(f'DFT {label}',fontsize=14)
+    
+    if legend: plt.legend()
 
 def coded_parity_plot(X,y,label,ref):
 
